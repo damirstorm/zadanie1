@@ -370,3 +370,66 @@ body {
   font-size: 14px;
   border: 1px solid #e2e8f0;
 }
+.split-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.split-header {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.split-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  width: 100%;
+}
+
+.split-row input {
+  padding: 6px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 12px;
+  min-width: 0;
+}
+
+.split-row input:first-child {
+  flex: 2;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.split-row input:nth-child(2) {
+  flex: 1;
+  width: 60px;
+}
+
+.split-remaining {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 0;
+}
+
+.split-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.split-actions button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  background: #e2e8f0;
+}
+
+.split-actions button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

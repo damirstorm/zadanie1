@@ -59,7 +59,8 @@ def match_transaction(tx: Transaction) -> MatchItem:
     matched_by_number = []
     if mentioned_numbers:
         for num in mentioned_numbers:
-            match = find_invoice_by_short_number(num, pending)
+            inv_id = f"inv-{num}"
+            match = next((inv for inv in pending if inv.id == inv_id), None)
             if match:
                 matched_by_number.append(match)
 

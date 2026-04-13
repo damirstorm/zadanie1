@@ -76,3 +76,14 @@ class AuditLog(BaseModel):
     operator: str
     confirmed_at: str
     actions: List[ConfirmMatchItem]
+
+class SplitItem(BaseModel):
+    invoice_id: str
+    amount: float  # сколько из платежа идёт на этот счёт
+
+
+class ConfirmMatchItem(BaseModel):
+    tx_id: str
+    invoice_ids: List[str]        # для обратной совместимости
+    splits: List[SplitItem] = []  # ручное разделение суммы
+    is_advance: bool = False

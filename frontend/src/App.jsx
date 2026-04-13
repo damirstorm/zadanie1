@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { reconcile, confirmPlan, getAudit } from "./api";
+import { useState, useEffect } from "react";
+import { reconcile, confirmPlan, getAudit, getInvoices } from "./api";
 import MatchColumn from "./components/MatchColumn";
 import AuditLog from "./components/AuditLog";
 import "./App.css";
@@ -12,6 +12,11 @@ export default function App() {
   const [audit, setAudit] = useState([]);
   const [showAudit, setShowAudit] = useState(false);
   const [operator, setOperator] = useState("operator1");
+  const [invoices, setInvoices] = useState([]);
+
+  useEffect(() => {
+    getInvoices().then((res) => setInvoices(res.data));
+  }, []);
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -28,11 +33,11 @@ export default function App() {
     setLoading(false);
   };
 
-  const handleAssign = (txId, invoiceIds) => {
+  const handleAssign = (txId, invoiceIds, splits = []) => {
     setMatches((prev) =>
       prev.map((m) =>
         m.transaction.tx_id === txId
-          ? { ...m, invoice_ids: invoiceIds, status: "UNCERTAIN" }
+          ? { ...m, invoice_ids: invoiceIds, splits, status: "UNCERTAIN" }
           : m
       )
     );
@@ -55,6 +60,7 @@ export default function App() {
         matches.map((m) => ({
           tx_id: m.transaction.tx_id,
           invoice_ids: m.invoice_ids,
+          splits: m.splits || [],
           is_advance: m.is_advance || false,
         }))
       );
@@ -102,6 +108,11 @@ export default function App() {
           <div className="plan-info">
             <span>План: <code>{plan.plan_id.slice(0, 8)}...</code></span>
             <span>Транзакций: {matches.length}</span>
+            {matches.length === 0 && (
+              <span style={{ color: "#22c55e", fontWeight: 600 }}>
+                ✅ Все транзакции уже обработаны — дублей нет
+              </span>
+            )}
           </div>
 
           <div className="columns">
@@ -109,6 +120,7 @@ export default function App() {
               title="✅ Автоматически"
               color="#22c55e"
               items={auto}
+              invoices={invoices}
               onAssign={handleAssign}
               onMarkAdvance={handleMarkAdvance}
             />
@@ -116,6 +128,7 @@ export default function App() {
               title="⚠️ Под вопросом"
               color="#f59e0b"
               items={uncertain}
+              invoices={invoices}
               onAssign={handleAssign}
               onMarkAdvance={handleMarkAdvance}
             />
@@ -123,6 +136,7 @@ export default function App() {
               title="❌ Не сматчено"
               color="#ef4444"
               items={unmatched}
+              invoices={invoices}
               onAssign={handleAssign}
               onMarkAdvance={handleMarkAdvance}
             />

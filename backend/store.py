@@ -1,67 +1,34 @@
 from models import Client, Invoice, InvoiceStatus, AuditLog, ReconcilePlan
-from datetime import datetime
 
-# --- Клиенты ---
 clients: dict[str, Client] = {
-    "a1b2c3d4-0001-0001-0001-000000000001": Client(
-        id="a1b2c3d4-0001-0001-0001-000000000001",
-        name="ТОО Ромашка",
-        iin="123456789012",
-        bin="123456789012"
-    ),
-    "a1b2c3d4-0002-0002-0002-000000000002": Client(
-        id="a1b2c3d4-0002-0002-0002-000000000002",
-        name="ИП Иванов",
-        iin="840101400123"
-    ),
-    "a1b2c3d4-0003-0003-0003-000000000003": Client(
-        id="a1b2c3d4-0003-0003-0003-000000000003",
-        name="ТОО Альфа",
-        bin="987654321098"
-    ),
+    "c1": Client(id="c1", name="ТОО Ромашка", iin="123456789012", bin="123456789012"),
+    "c2": Client(id="c2", name="ИП Иванов", iin="840101400123"),
+    "c3": Client(id="c3", name="ТОО Альфа", bin="987654321098"),
 }
 
-# --- Счета ---
 invoices: dict[str, Invoice] = {
-    "f47ac10b-4521-4521-4521-000000004521": Invoice(
-        id="f47ac10b-4521-4521-4521-000000004521",
-        client_id="a1b2c3d4-0001-0001-0001-000000000001",
-        amount=125000,
-        currency="KZT",
-        due_date="2026-04-01",
-        status=InvoiceStatus.PENDING,
+    "inv-4521": Invoice(
+        id="inv-4521", client_id="c1", amount=125000, currency="KZT",
+        due_date="2026-04-01", status=InvoiceStatus.PENDING,
         created_at="2026-03-25T10:00:00Z"
     ),
-    "f47ac10b-4522-4522-4522-000000004522": Invoice(
-        id="f47ac10b-4522-4522-4522-000000004522",
-        client_id="a1b2c3d4-0001-0001-0001-000000000001",
-        amount=150000,
-        currency="KZT",
-        due_date="2026-04-05",
-        status=InvoiceStatus.PENDING,
+    "inv-4522": Invoice(
+        id="inv-4522", client_id="c1", amount=150000, currency="KZT",
+        due_date="2026-04-05", status=InvoiceStatus.PENDING,
         created_at="2026-03-26T10:00:00Z"
     ),
-    "f47ac10b-4523-4523-4523-000000004523": Invoice(
-        id="f47ac10b-4523-4523-4523-000000004523",
-        client_id="a1b2c3d4-0001-0001-0001-000000000001",
-        amount=100000,
-        currency="KZT",
-        due_date="2026-04-05",
-        status=InvoiceStatus.PENDING,
+    "inv-4523": Invoice(
+        id="inv-4523", client_id="c1", amount=100000, currency="KZT",
+        due_date="2026-04-05", status=InvoiceStatus.PENDING,
         created_at="2026-03-26T11:00:00Z"
     ),
-    "f47ac10b-4524-4524-4524-000000004524": Invoice(
-        id="f47ac10b-4524-4524-4524-000000004524",
-        client_id="a1b2c3d4-0002-0002-0002-000000000002",
-        amount=500000,
-        currency="KZT",
-        due_date="2026-04-03",
-        status=InvoiceStatus.PENDING,
+    "inv-4524": Invoice(
+        id="inv-4524", client_id="c2", amount=500000, currency="KZT",
+        due_date="2026-04-03", status=InvoiceStatus.PENDING,
         created_at="2026-03-27T09:00:00Z"
     ),
 }
 
-# --- In-memory хранилища ---
 processed_tx_ids: set[str] = set()
 plans: dict[str, ReconcilePlan] = {}
 audit_logs: list[AuditLog] = []
